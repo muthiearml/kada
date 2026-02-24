@@ -36,6 +36,10 @@ app.get("/", (req, res) => {
   res.send("OK");
 });
 
+app.get("/1", (req, res) => {
+  res.send("Ini rute 1");
+});
+
 app.get("/say/:greeting", (req, res) => {
   const { greeting } = req.params;
   res.send(greeting);

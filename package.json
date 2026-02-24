@@ -1,0 +1,16 @@
+{
+  "name": "muthie",
+  "version": "1.0.0",
+  "description": "ini muthie nyobain",
+  "main": "index.js",
+  "scripts": {
+    "start" : "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type" : "module",
+  "author": "muthie",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

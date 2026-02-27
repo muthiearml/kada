@@ -13,16 +13,17 @@ import { Post } from "./models/index.js";
 // });
 // app.listen(3000);
 
+const uri =
+  "mongodb+srv://muthiekada:muthiekada@cluster0.nuncnce.mongodb.net/?appName=Cluster0";
+// const uri = "mongodb://muthiekada:muthiekada@ac-wvhjbbz-shard-00-00.nuncnce.mongodb.net:27017,ac-wvhjbbz-shard-00-01.nuncnce.mongodb.net:27017,ac-wvhjbbz-shard-00-02.nuncnce.mongodb.net:27017/appdb?ssl=true&replicaSet=atlas-cdo6bt-shard-0&authSource=admin&retryWrites=true&w=majority"
+
 mongoose
-  .connect(
-    "mongodb://muthiekada:muthiekada@ac-wvhjbbz-shard-00-00.nuncnce.mongodb.net:27017,ac-wvhjbbz-shard-00-01.nuncnce.mongodb.net:27017,ac-wvhjbbz-shard-00-02.nuncnce.mongodb.net:27017/appdb?ssl=true&replicaSet=atlas-cdo6bt-shard-0&authSource=admin&retryWrites=true&w=majority",
-    {
-      family: 4,
-      tls: true,
-      serverSelectionTimeoutMS: 10000,
-      connectTimeoutMS: 10000,
-    },
-  )
+  .connect(uri, {
+    family: 4,
+    tls: true,
+    serverSelectionTimeoutMS: 10000,
+    connectTimeoutMS: 10000,
+  })
   .then(() => console.log("Terhubung ke MongoDB Atlas!"))
   .catch((err) => console.error("Gagal Connect:", err));
 

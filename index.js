@@ -4,10 +4,13 @@ import mongoose from "mongoose";
 import { Post } from "./models/index.js";
 import cors from "cors";
 
-const cors = require('cors');
-app.use(cors({
-  origin: "*" 
-}));
+const app = express();
+
+app.use(
+  cors({
+    origin: "*",
+  }),
+);
 
 // -- ini yang Hello MUTHIE
 // belajar init, pidahin type dari common js ke module
@@ -19,9 +22,10 @@ app.use(cors({
 // });
 // app.listen(3000);
 
+// const uri =
+//   "mongodb+srv://muthiekada:muthiekada@cluster0.nuncnce.mongodb.net/?appName=Cluster0";
 const uri =
-  "mongodb+srv://muthiekada:muthiekada@cluster0.nuncnce.mongodb.net/?appName=Cluster0";
-// const uri = "mongodb://muthiekada:muthiekada@ac-wvhjbbz-shard-00-00.nuncnce.mongodb.net:27017,ac-wvhjbbz-shard-00-01.nuncnce.mongodb.net:27017,ac-wvhjbbz-shard-00-02.nuncnce.mongodb.net:27017/appdb?ssl=true&replicaSet=atlas-cdo6bt-shard-0&authSource=admin&retryWrites=true&w=majority"
+  "mongodb://muthiekada:muthiekada@ac-wvhjbbz-shard-00-00.nuncnce.mongodb.net:27017,ac-wvhjbbz-shard-00-01.nuncnce.mongodb.net:27017,ac-wvhjbbz-shard-00-02.nuncnce.mongodb.net:27017/appdb?ssl=true&replicaSet=atlas-cdo6bt-shard-0&authSource=admin&retryWrites=true&w=majority";
 
 mongoose
   .connect(uri, {
@@ -32,8 +36,6 @@ mongoose
   })
   .then(() => console.log("Terhubung ke MongoDB Atlas!"))
   .catch((err) => console.error("Gagal Connect:", err));
-
-const app = express();
 
 app.use(express.json());
 
@@ -88,3 +90,4 @@ app.listen(3000, () => {
 // app.get('/',(req, res, next) => {
 //     res.send('Hello Express');
 // });
+export default app;

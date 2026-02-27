@@ -2,6 +2,12 @@ import express from "express";
 import noteRouter from "./routes/notes.js";
 import mongoose from "mongoose";
 import { Post } from "./models/index.js";
+import cors from "cors";
+
+const cors = require('cors');
+app.use(cors({
+  origin: "*" 
+}));
 
 // -- ini yang Hello MUTHIE
 // belajar init, pidahin type dari common js ke module

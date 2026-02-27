@@ -6,6 +6,7 @@ const router = Router();
 // [GET] Ambil semua catatan dari MongoDB
 router.get("/", async (req, res) => {
   try {
+    await connectDB();
     const notes = await Post.find(); // Pakai Post.find()
     res.json(notes);
   } catch (err) {

@@ -3,47 +3,36 @@ import { Post } from "../models/index.js";
 
 const router = Router();
 
-// [GET] Ambil semua catatan dari MongoDB
+// [GET] Ambil semua catatan
 router.get("/", async (req, res) => {
   try {
-    // await connectDB();
-    const notes = await Post.find(); // Pakai Post.find()
+    // Menambahkan sort({ createdAt: -1 }) agar catatan terbaru muncul paling atas
+    const notes = await Post.find().sort({ createdAt: -1 });
     res.json(notes);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// [GET] Ambil satu berdasarkan ID MongoDB
-router.get("/:id", async (req, res) => {
-  try {
-    const note = await Post.findById(req.params.id);
-    if (!note) return res.status(404).json({ error: "Note not found" });
-    res.json(note);
-  } catch (err) {
-    res.status(400).json({ error: "Invalid ID format" });
-  }
-});
-
-// [POST] Tambah catatan baru (Sudah Benar!)
+// [POST] Tambah catatan baru
 router.post("/", async (req, res) => {
   try {
-    const { title, content } = req.body;
-    const newNote = await Post.create({ title, content });
+    const { title, content, author } = req.body; // Ambil author dari frontend
+    const newNote = await Post.create({ title, content, author });
     res.status(201).json(newNote);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
 
-// [PUT] Update catatan di MongoDB
+// [PUT] Update catatan
 router.put("/:id", async (req, res) => {
   try {
-    const { title, content } = req.body;
+    const { title, content, author } = req.body; // Ambil author untuk update
     const updated = await Post.findByIdAndUpdate(
       req.params.id,
-      { title, content },
-      { new: true },
+      { title, content, author },
+      { new: true }, // 'new: true' agar mengembalikan data setelah diupdate
     );
     if (!updated) return res.status(404).json({ error: "Note not found" });
     res.json(updated);
@@ -52,7 +41,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// [DELETE] Hapus catatan di MongoDB
+// [DELETE] Hapus catatan
 router.delete("/:id", async (req, res) => {
   try {
     const deleted = await Post.findByIdAndDelete(req.params.id);

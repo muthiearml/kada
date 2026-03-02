@@ -49,6 +49,7 @@ app.get("/status", (req, res) => {
 });
 
 app.use("/notes", noteRouter);
+app.use("/auth", authRouter);
 
 app.listen(3000, () => {
   console.log("Server jalan di http://localhost:3000");

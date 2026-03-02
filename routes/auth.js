@@ -7,12 +7,12 @@ const router = Router();
 // [POST] SIGN UP
 router.post("/signup", async (req, res) => {
   try {
-    const { username, email, password, confirmPassword } = req.body;
+    const { username, email, password } = req.body;
 
-    // 1. Validasi Confirm Password
-    if (password !== confirmPassword) {
-      return res.status(400).json({ message: "Password tidak cocok" });
-    }
+    // // 1. Validasi Confirm Password
+    // if (password !== confirmPassword) {
+    //   return res.status(400).json({ message: "Password tidak cocok" });
+    // }
 
     // 2. Hash Password
     const salt = await bcrypt.genSalt(10);
@@ -22,7 +22,7 @@ router.post("/signup", async (req, res) => {
     const newUser = await User.create({
       username,
       email,
-      password: hashedPassword
+      password: hashedPassword,
     });
 
     res.status(201).json({ message: "User berhasil dibuat" });
@@ -38,7 +38,7 @@ router.post("/login", async (req, res) => {
 
     // Cari user berdasarkan email ATAU username
     const user = await User.findOne({
-      $or: [{ email: emailOrUsername }, { username: emailOrUsername }]
+      $or: [{ email: emailOrUsername }, { username: emailOrUsername }],
     });
 
     if (!user) {

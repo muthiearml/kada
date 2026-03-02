@@ -3,8 +3,11 @@ import noteRouter from "./routes/notes.js";
 import mongoose from "mongoose";
 import { Post } from "./models/index.js";
 import cors from "cors";
+import authRouter from "./routes/auth.js";
 
 const app = express();
+
+app.use("/auth", authRouter);
 
 app.use(
   cors({

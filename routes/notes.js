@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { Post } from "../models/index.js";
+import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const router = Router();
 

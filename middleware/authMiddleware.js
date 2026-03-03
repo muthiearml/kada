@@ -7,7 +7,7 @@ export const authMiddleware = (req, res, next) => {
   // 1. Ambil token dari header 'Authorization'
   // Formatnya biasanya: "Bearer <token>"
   const authHeader = req.header("Authorization");
-  const token = authHeader && authHeader.split(" ")[1];
+  //const token = authHeader && authHeader.split(" ")[1];
 
   // 2. Jika tidak ada token
   if (!token) {

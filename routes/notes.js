@@ -4,14 +4,11 @@ import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const router = Router();
 
-// Rahasia untuk JWT (Sebaiknya simpan di .env nanti)
-const JWT_SECRET = "MUTHIE_RAHASIA_NEGARA_123";
-
-// [GET] Ambil semua catatan (Hanya milik user yang sedang login)
+// [GET] Ambil semua catatan
 router.get("/", authMiddleware, async (req, res) => {
   try {
-    // Filter berdasarkan author: req.user.id agar data tidak bercampur dengan user lain
-    const notes = await Post.find({ author: req.user.username }).sort({
+    // PERBAIKAN: Gunakan req.user.id agar konsisten dengan saat simpan data
+    const notes = await Post.find({ author: req.user.id }).sort({
       createdAt: -1,
     });
     res.json(notes);
@@ -23,13 +20,13 @@ router.get("/", authMiddleware, async (req, res) => {
 // [POST] Tambah catatan baru
 router.post("/", authMiddleware, async (req, res) => {
   try {
-    const { title, content } = req.user.id;
+    // PERBAIKAN: title dan content diambil dari req.body, bukan req.user.id
+    const { title, content } = req.body;
 
-    // Author diambil otomatis dari req.user.id (hasil verifikasi token di middleware)
     const newNote = await Post.create({
       title,
       content,
-      author: req.user.id,
+      author: req.user.id, // ID diambil otomatis dari token
     });
 
     res.status(201).json(newNote);
@@ -41,11 +38,11 @@ router.post("/", authMiddleware, async (req, res) => {
 // [PUT] Update catatan
 router.put("/:id", authMiddleware, async (req, res) => {
   try {
-    const { title, content } = req.user.id;
+    // PERBAIKAN: Ambil data baru dari req.body
+    const { title, content } = req.body;
 
-    // Kita pastikan yang update adalah pemilik catatannya
     const updated = await Post.findOneAndUpdate(
-      { _id: req.params.id, author: req.user.username }, // Cari berdasarkan ID Note DAN ID User
+      { _id: req.params.id, author: req.user.id }, // Cari berdasarkan ID Note dan ID Pemilik
       { title, content },
       { new: true },
     );
@@ -54,6 +51,7 @@ router.put("/:id", authMiddleware, async (req, res) => {
       return res
         .status(404)
         .json({ error: "Note tidak ditemukan atau Anda tidak punya akses" });
+
     res.json(updated);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -63,7 +61,6 @@ router.put("/:id", authMiddleware, async (req, res) => {
 // [DELETE] Hapus catatan
 router.delete("/:id", authMiddleware, async (req, res) => {
   try {
-    // Kita pastikan yang hapus adalah pemilik catatannya
     const deleted = await Post.findOneAndDelete({
       _id: req.params.id,
       author: req.user.id,
@@ -73,6 +70,7 @@ router.delete("/:id", authMiddleware, async (req, res) => {
       return res
         .status(404)
         .json({ error: "Note tidak ditemukan atau Anda tidak punya akses" });
+
     res.json({ message: "Note deleted successfully" });
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -80,6 +78,89 @@ router.delete("/:id", authMiddleware, async (req, res) => {
 });
 
 export default router;
+
+// import { Router } from "express";
+// import { Post } from "../models/index.js";
+// import { authMiddleware } from "../middleware/authMiddleware.js";
+
+// const router = Router();
+
+// // Rahasia untuk JWT (Sebaiknya simpan di .env nanti)
+// const JWT_SECRET = "MUTHIE_RAHASIA_NEGARA_123";
+
+// // [GET] Ambil semua catatan (Hanya milik user yang sedang login)
+// router.get("/", authMiddleware, async (req, res) => {
+//   try {
+//     // Filter berdasarkan author: req.user.id agar data tidak bercampur dengan user lain
+//     const notes = await Post.find({ author: req.user.username }).sort({
+//       createdAt: -1,
+//     });
+//     res.json(notes);
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
+
+// // [POST] Tambah catatan baru
+// router.post("/", authMiddleware, async (req, res) => {
+//   try {
+//     const { title, content } = req.user.id;
+
+//     // Author diambil otomatis dari req.user.id (hasil verifikasi token di middleware)
+//     const newNote = await Post.create({
+//       title,
+//       content,
+//       author: req.user.id,
+//     });
+
+//     res.status(201).json(newNote);
+//   } catch (err) {
+//     res.status(400).json({ error: err.message });
+//   }
+// });
+
+// // [PUT] Update catatan
+// router.put("/:id", authMiddleware, async (req, res) => {
+//   try {
+//     const { title, content } = req.user.id;
+
+//     // Kita pastikan yang update adalah pemilik catatannya
+//     const updated = await Post.findOneAndUpdate(
+//       { _id: req.params.id, author: req.user.username }, // Cari berdasarkan ID Note DAN ID User
+//       { title, content },
+//       { new: true },
+//     );
+
+//     if (!updated)
+//       return res
+//         .status(404)
+//         .json({ error: "Note tidak ditemukan atau Anda tidak punya akses" });
+//     res.json(updated);
+//   } catch (err) {
+//     res.status(400).json({ error: err.message });
+//   }
+// });
+
+// // [DELETE] Hapus catatan
+// router.delete("/:id", authMiddleware, async (req, res) => {
+//   try {
+//     // Kita pastikan yang hapus adalah pemilik catatannya
+//     const deleted = await Post.findOneAndDelete({
+//       _id: req.params.id,
+//       author: req.user.id,
+//     });
+
+//     if (!deleted)
+//       return res
+//         .status(404)
+//         .json({ error: "Note tidak ditemukan atau Anda tidak punya akses" });
+//     res.json({ message: "Note deleted successfully" });
+//   } catch (err) {
+//     res.status(400).json({ error: err.message });
+//   }
+// });
+
+// export default router;
 
 // // [GET] Ambil semua catatan
 // router.get("/", async (req, res) => {

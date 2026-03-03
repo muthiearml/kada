@@ -4,13 +4,14 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"; // [1] Import jwt
 
 const router = Router();
+const JWT_SECRET = "MUTHIE_RAHASIA_NEGARA_123";
 
 // ---------------------
 
 // [POST] SIGN UP
 router.post("/signup", async (req, res) => {
   try {
-    const { username, email, password } = req.user.username;
+    const { username, email, password } = req.body;
 
     // 1. Hash Password
     const salt = await bcrypt.genSalt(10);
@@ -38,7 +39,7 @@ router.post("/signup", async (req, res) => {
 // [POST] LOGIN
 router.post("/login", async (req, res) => {
   try {
-    const { emailOrUsername, password } = req.user.username;
+    const { emailOrUsername, password } = req.body;
 
     // 1. Cari user berdasarkan email ATAU username
     const user = await User.findOne({

@@ -23,7 +23,7 @@ router.get("/", authMiddleware, async (req, res) => {
 // [POST] Tambah catatan baru
 router.post("/", authMiddleware, async (req, res) => {
   try {
-    const { title, content } = req.user.username;
+    const { title, content } = req.user.id;
 
     // Author diambil otomatis dari req.user.id (hasil verifikasi token di middleware)
     const newNote = await Post.create({
@@ -41,7 +41,7 @@ router.post("/", authMiddleware, async (req, res) => {
 // [PUT] Update catatan
 router.put("/:id", authMiddleware, async (req, res) => {
   try {
-    const { title, content } = req.user.username;
+    const { title, content } = req.user.id;
 
     // Kita pastikan yang update adalah pemilik catatannya
     const updated = await Post.findOneAndUpdate(
@@ -66,7 +66,7 @@ router.delete("/:id", authMiddleware, async (req, res) => {
     // Kita pastikan yang hapus adalah pemilik catatannya
     const deleted = await Post.findOneAndDelete({
       _id: req.params.id,
-      author: req.user.username,
+      author: req.user.id,
     });
 
     if (!deleted)

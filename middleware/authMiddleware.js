@@ -7,7 +7,7 @@ export const authMiddleware = (req, res, next) => {
   // 1. Ambil token dari header 'Authorization'
   // Formatnya biasanya: "Bearer <token>"
   const authHeader = req.header("Authorization");
-  //const token = authHeader && authHeader.split(" ")[1];
+  const token = authHeader && authHeader.split(" ")[1];
 
   // 2. Jika tidak ada token
   if (!token) {
@@ -17,10 +17,10 @@ export const authMiddleware = (req, res, next) => {
   try {
     // 3. Verifikasi token
     const decoded = jwt.verify(token, JWT_SECRET);
-    
+
     // 4. Simpan data user (id & username) ke dalam req agar bisa dipakai di notes.js
     req.user = decoded;
-    
+
     // 5. Lanjut ke fungsi berikutnya
     next();
   } catch (err) {

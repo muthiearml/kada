@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import { Post } from "./models/index.js";
 import cors from "cors";
 import authRouter from "./routes/auth.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
 
 const app = express();
 
@@ -48,6 +49,7 @@ app.get("/status", (req, res) => {
 
 app.use("/notes", noteRouter);
 app.use("/auth", authRouter);
+app.use("/payment", paymentRoutes);
 
 app.listen(3000, () => {
   console.log("Server jalan di http://localhost:3000");

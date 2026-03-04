@@ -49,7 +49,7 @@ app.get("/status", (req, res) => {
 
 app.use("/notes", noteRouter);
 app.use("/auth", authRouter);
-app.use("/payment", paymentRoutes);
+app.use("/api/payment", paymentRoutes);
 
 app.listen(3000, () => {
   console.log("Server jalan di http://localhost:3000");

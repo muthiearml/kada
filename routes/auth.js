@@ -2,6 +2,7 @@ import { Router } from "express";
 import { User } from "../models/index.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"; // [1] Import jwt
+import sendEmail from "../utils/sendEmail.js"; 
 
 const router = Router();
 const JWT_SECRET = "MUTHIE_RAHASIA_NEGARA_123";
@@ -74,7 +75,64 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// [POST] FORGOT PASSWORD
+router.post("/forgot-password", async (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    // 1. Cek apakah user ada di database
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "Email tidak ditemukan!" });
+    }
+
+    // 2. Buat pesan (Sederhana dulu untuk tes)
+    const message = `Halo ${user.username}, ini adalah tes kirim email dari aplikasi kamu!`;
+
+    // 3. Kirim email menggunakan fungsi utils tadi
+    await sendEmail({
+      email: user.email,
+      subject: "Reset Password MuthieNotes",
+      message,
+    });
+
+    res.json({ message: "Email berhasil terkirim ke " + email });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 export default router;
+
+// --- smtp
+// import sendEmail from "../utils/sendEmail.js"; // Import filenya
+
+// // [POST] FORGOT PASSWORD
+// router.post("/forgot-password", async (req, res) => {
+//   try {
+//     const { email } = req.body;
+    
+//     // 1. Cek apakah user ada di database
+//     const user = await User.findOne({ email });
+//     if (!user) {
+//       return res.status(404).json({ message: "Email tidak ditemukan!" });
+//     }
+
+//     // 2. Buat pesan (Sederhana dulu untuk tes)
+//     const message = `Halo ${user.username}, ini adalah tes kirim email dari aplikasi kamu!`;
+
+//     // 3. Kirim email menggunakan fungsi utils tadi
+//     await sendEmail({
+//       email: user.email,
+//       subject: "Reset Password MuthieNotes",
+//       message,
+//     });
+
+//     res.json({ message: "Email berhasil terkirim ke " + email });
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
 
 // ---------------
 

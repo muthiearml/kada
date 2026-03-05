@@ -9,7 +9,7 @@ export const authMiddleware = (req, res, next) => {
   const authHeader = req.header("Authorization");
   const token = authHeader && authHeader.split(" ")[1];
 
-  // 2. Jika tidak ada token
+  // 2. Jika tidak ada tokgit rm --cached .enven
   if (!token) {
     return res.status(401).json({ message: "Akses ditolak, token tidak ada!" });
   }

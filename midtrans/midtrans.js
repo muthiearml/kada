@@ -56,7 +56,7 @@ export const handleNotification = async (req, res) => {
     const orderId = statusResponse.order_id;
     const transactionStatus = statusResponse.transaction_status;
     const fraudStatus = statusResponse.fraud_status;
-    const paymentType = statusResponse.pament_type;
+    const paymentType = statusResponse.payment_type;
 
     console.log("Order ID", orderId);
     console.log("Transaction Status:", transactionStatus);
@@ -99,6 +99,6 @@ export const checkStatus = async (req, res) => {
         });
     } catch (error) {
         console.error("Error checkStatus", error);
-        req.status(500).json({ message: "Gagal cek status transaksi"});
+        res.status(500).json({ message: "Gagal cek status transaksi"});
     }
 };

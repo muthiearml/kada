@@ -10,5 +10,5 @@ router.post("/checkout", createTransaction);
 // router.post("/create", createTransaction);
 
 // notif
-//router.post("/notification", handleNotification);
+router.post("/notification", handleNotification);
 export default router;

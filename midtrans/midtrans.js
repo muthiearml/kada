@@ -62,43 +62,44 @@ export const handleNotification = async (req, res) => {
     console.log("Transaction Status:", transactionStatus);
 
     if (transactionStatus == "capture") {
-        if (fraudStatus == "accept") {
-            console.log("Pembayaran berhasil (capture)");
-        }
+      if (fraudStatus == "accept") {
+        console.log("Pembayaran berhasil (capture)");
+      }
     } else if (transactionStatus == "settlement") {
-        console.log("Pembayaran berhasil (settlement)");
+      console.log("Pembayaran berhasil (settlement)");
     } else if (transactionStatus == "pending") {
-        console.log("Menunggu pembayaran");
+      console.log("Menunggu pembayaran");
     } else if (
-        transactionStatus == "cancel" ||
-        transactionStatus == "deny" ||
-        transactionStatus == "expire" ||
+      transactionStatus == "cancel" ||
+      transactionStatus == "deny" ||
+      transactionStatus == "expire"
     ) {
-        console.log("Pembayaran gagal");
+      console.log("Pembayaran gagal");
     }
 
-    res.status(200).json({ message: "Notification handled", status: statusResponse});
-
+    res
+      .status(200)
+      .json({ message: "Notification handled", status: statusResponse });
   } catch (error) {
     console.error("Error handleNotification", error);
-    res.status(500).json({ message: "Error handling notification"});
+    res.status(500).json({ message: "Error handling notification" });
   }
 };
 
 export const checkStatus = async (req, res) => {
-    try{
-        const { orderId } = req.params;
+  try {
+    const { orderId } = req.params;
 
-        const statusResponse = await coreApi.transaction.status(orderId);
+    const statusResponse = await coreApi.transaction.status(orderId);
 
-        res.status(200).json({
-            order_id: statusResponse.order_id,
-            transaction_status: statusResponse.transaction_status,
-            payment_type: statusResponse.payment_type,
-            fraud_status: statusResponse.fraud_status,
-        });
-    } catch (error) {
-        console.error("Error checkStatus", error);
-        res.status(500).json({ message: "Gagal cek status transaksi"});
-    }
+    res.status(200).json({
+      order_id: statusResponse.order_id,
+      transaction_status: statusResponse.transaction_status,
+      payment_type: statusResponse.payment_type,
+      fraud_status: statusResponse.fraud_status,
+    });
+  } catch (error) {
+    console.error("Error checkStatus", error);
+    res.status(500).json({ message: "Gagal cek status transaksi" });
+  }
 };
